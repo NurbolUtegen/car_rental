@@ -17,8 +17,8 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # автоматический вход после регистрации
-            return redirect('home')  # можно поменять на нужную страницу
+            login(request, user)
+            return redirect('home')
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
@@ -37,7 +37,28 @@ def book_car(request, car_id):
             booking.car = car
             booking.user = request.user
             booking.save()
-            return redirect('home')  # или на страницу с подтверждением
+            return redirect('home')
     else:
         form = BookingForm()
     return render(request, 'booking.html', {'form': form, 'car': car})
+
+def car_list(request):
+    cars = Car.objects.all()
+    return render(request, 'car_list.html', {'cars': cars})
+
+
+from .forms import CarForm
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def create_ad(request):
+    if request.method == 'POST':
+        form = CarForm(request.POST, request.FILES)
+        if form.is_valid():
+            car = form.save(commit=False)
+            car.created_by = request.user
+            car.save()
+            return redirect('car_list')
+    else:
+        form = CarForm()
+    return render(request, 'create_ad.html', {'form': form})

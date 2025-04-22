@@ -15,3 +15,15 @@ class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ['start_date', 'end_date']
+
+
+from django import forms
+from .models import Car
+
+class CarForm(forms.ModelForm):
+    class Meta:
+        model = Car
+        fields = ['name', 'description', 'price', 'image']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Доступные автомобили{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Доступные автомобили</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for car in cars %}
+    <div class="col">
+        <div class="card h-100">
+            <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ car.name }}</h5>
+                <p class="card-text">{{ car.description }}</p>
+                <p class="card-text"><strong>Цена:</strong> {{ car.price }} ₽ / сутки</p>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{% url 'book_car' car.id %}" class="btn btn-success">Забронировать</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
