@@ -11,15 +11,17 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">CarRental</a>
         <div class="d-flex ms-auto">
-    {% if user.is_authenticated %}
-        <span class="me-2">Привет, {{ user.username }}!</span>
-        <a href="{% url 'logout' %}" class="btn btn-outline-danger">Выйти</a>
-    {% else %}
-        <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Вход</a>
-        <a href="{% url 'signup' %}" class="btn btn-primary">Регистрация</a>
-    {% endif %}
-</div>
-
+            {% if user.is_authenticated %}
+                <span class="me-2">Привет, {{ user.username }}!</span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">Выйти</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Вход</a>
+                <a href="{% url 'signup' %}" class="btn btn-primary">Регистрация</a>
+            {% endif %}
+        </div>
     </div>
 </nav>
 
@@ -35,7 +37,7 @@
                     <p class="card-text">{{ car.description }}</p>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="#" class="btn btn-success">Забронировать</a>
+                    <a href="{% url 'book_car' car.id %}" class="btn btn-success">Забронировать</a>
                 </div>
             </div>
         </div>
