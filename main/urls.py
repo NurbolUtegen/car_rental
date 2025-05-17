@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('book/<int:car_id>/', views.book_car, name='book_car'),
     path('create-ad/', views.create_ad, name='create_ad'),
+    path('search-nearby/', views.search_nearby, name='search_nearby'),
 ]

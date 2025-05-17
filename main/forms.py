@@ -17,7 +17,6 @@ class BookingForm(forms.ModelForm):
         fields = ['start_date', 'end_date']
 
 
-from django import forms
 from .models import Car
 
 class CarForm(forms.ModelForm):
@@ -29,3 +28,9 @@ class CarForm(forms.ModelForm):
             'latitude': forms.HiddenInput(),
             'longitude': forms.HiddenInput(),
         }
+
+
+class LocationSearchForm(forms.Form):
+    latitude = forms.FloatField(label='Ваше местоположение (широта)')
+    longitude = forms.FloatField(label='Ваше местоположение (долгота)')
+    radius = forms.IntegerField(label='Радиус (км)', min_value=1, initial=10)

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Поиск машин рядом{% endblock %}
+
+{% block content %}
+<h2>Найти машины рядом</h2>
+
+<form method="get">
+    <div id="map" style="width: 100%; height: 400px;" class="mb-3"></div>
+
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+
+    <div class="mb-3">
+        <label for="radius">Радиус (км):</label>
+        <input type="number" name="radius" id="radius" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Найти</button>
+</form>
+
+{% if cars %}
+    <h3 class="mt-4">Найдено {{ cars|length }} машин:</h3>
+    <ul>
+        {% for car in cars %}
+            <li>{{ car.name }} — {{ car.distance|floatformat:2 }} км</li>
+        {% endfor %}
+    </ul>
+{% elif cars is not none %}
+    <p class="mt-4">Ничего не найдено.</p>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- Яндекс.Карты -->
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript">
+    ymaps.ready(function () {
+        var map = new ymaps.Map("map", {
+            center: [43.238949, 76.889709], // Центр Алматы
+            zoom: 12
+        });
+
+        var marker;
+
+        map.events.add('click', function (e) {
+            var coords = e.get('coords');
+            var lat = coords[0];
+            var lng = coords[1];
+
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            if (marker) {
+                map.geoObjects.remove(marker);
+            }
+
+            marker = new ymaps.Placemark([lat, lng], {}, {
+                preset: 'islands#redIcon'
+            });
+
+            map.geoObjects.add(marker);
+        });
+    });
+</script>
+{% endblock %}
