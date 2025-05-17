@@ -7,7 +7,43 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+
+    <h3>Выберите местоположение на карте:</h3>
+    <div id="map" style="width: 100%; height: 400px; margin-bottom: 20px;"></div>
+
+    <!-- Скрытые поля для координат -->
+    <input type="hidden" id="id_latitude" name="latitude">
+    <input type="hidden" id="id_longitude" name="longitude">
+
     <button type="submit" class="btn btn-primary">Создать</button>
     <a href="{% url 'car_list' %}" class="btn btn-secondary">Назад</a>
 </form>
+
+<!-- Яндекс Карты -->
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+<script>
+    ymaps.ready(function () {
+        var map = new ymaps.Map("map", {
+            center: [43.238949, 76.889709], // Центр, например, Алматы
+            zoom: 10
+        });
+
+        var placemark;
+
+        map.events.add('click', function (e) {
+            var coords = e.get('coords');
+
+            if (placemark) {
+                placemark.geometry.setCoordinates(coords);
+            } else {
+                placemark = new ymaps.Placemark(coords, {}, { draggable: true });
+                map.geoObjects.add(placemark);
+            }
+
+            // Установка координат в скрытые поля
+            document.getElementById('id_latitude').value = coords[0];
+            document.getElementById('id_longitude').value = coords[1];
+        });
+    });
+</script>
 {% endblock %}

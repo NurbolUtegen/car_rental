@@ -7,6 +7,8 @@ class Car(models.Model):
     price = models.DecimalField("Цена в сутки (₽)", max_digits=10, decimal_places=2)
     image = models.ImageField("Фото", upload_to='cars/')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Создатель")
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)git add .
 
     def __str__(self):
         return f"{self.name} — {self.price}₽"
